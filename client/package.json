@@ -1,0 +1,19 @@
+{
+  "version": "1.0.0",
+  "description": "My webpack project",
+  "name": "webpack-project",
+  "type": "module",
+  "scripts": {
+    "start": "npm run serve",
+    "serve": "vite serve"
+  },
+  "devDependencies": {
+    "vite": "^6.3.5"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.1.7",
+    "daisyui": "^5.0.37",
+    "tailwindcss": "^4.1.7",
+    "typescript": "^5.8.3"
+  }
+}
