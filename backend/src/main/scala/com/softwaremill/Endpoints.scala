@@ -1,18 +1,35 @@
 package com.softwaremill
 
 import sttp.tapir.*
-
 import cats.effect.IO
+import sttp.tapir.RawBodyType.FileBody
 import sttp.tapir.server.ServerEndpoint
 import sttp.tapir.swagger.bundle.SwaggerInterpreter
 
-object Endpoints extends UserEndpoints with LibraryEndpoints {
+trait FilesServerEndpoints extends FilesEndpoints {
+  val listServerEndpoint = listEndpoint.serverLogicSuccess { paths =>
+    println(s"paths: $paths")
+    IO.pure(List(
+      FileEntry("a", FileType.File),
+      FileEntry("b", FileType.Directory),
+    ))
+  }
+
+  val downloadServerEndpoint = downloadEndpoint.serverLogic { paths =>
+    println(s"paths: $paths")
+    IO.raiseError(IllegalArgumentException("nope"))
+  }
+
+  val endpoints = List(listServerEndpoint, downloadServerEndpoint)
+}
+
+object Endpoints extends UserEndpoints with LibraryEndpoints with FilesServerEndpoints {
   val helloServerEndpoint: ServerEndpoint[Any, IO] =
     helloEndpoint.serverLogicSuccess(user => IO.pure(s"Hello ${user.name}"))
 
   val booksListingServerEndpoint: ServerEndpoint[Any, IO] = booksListing.serverLogicSuccess(_ => IO.pure(Library.books))
 
-  val apiEndpoints: List[ServerEndpoint[Any, IO]] = List(helloServerEndpoint, booksListingServerEndpoint)
+  val apiEndpoints: List[ServerEndpoint[Any, IO]] = List(helloServerEndpoint, booksListingServerEndpoint) ++ endpoints
 
   val docEndpoints: List[ServerEndpoint[Any, IO]] = SwaggerInterpreter()
     .fromServerEndpoints[IO](apiEndpoints, "local-share", "1.0.0")
