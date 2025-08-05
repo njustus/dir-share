@@ -58,8 +58,7 @@ lazy val client =
         "com.raquo" %%% "laminar" % "17.2.1",
         "dev.frontroute" %%% "frontroute" % "0.19.1",
         "io.github.cquiroz" %%% "scala-java-time" % "2.6.0",
-      "com.softwaremill.sttp.tapir" %%% "tapir-sttp-client" % TapirVersion,
-      "com.softwaremill.sttp.client4" %%% "core" % "4.0.9",
+              "com.softwaremill.sttp.tapir" %%% "tapir-sttp-client4" % TapirVersion,
       ),
       // excludeDependencies ++= Seq(
       //   "org.scala-lang.modules" %% "scala-collection-compat_sjs1",

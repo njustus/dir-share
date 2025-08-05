@@ -16,14 +16,15 @@ trait FilesServerEndpoints extends FilesEndpoints {
     fileService.list(paths)
   }
 
-  val downloadServerEndpoint: ServerEndpoint[Any, IO] {
+  lazy val downloadServerEndpoint: ServerEndpoint[Any, IO] {
     type SECURITY_INPUT = Unit; type PRINCIPAL = Unit; type INPUT = List[String]; type ERROR_OUTPUT = Unit;
     type OUTPUT         = File
-  } = downloadEndpoint.serverLogicSuccess { paths =>
-    fileService.download(paths)
-  }
+  } = ???
+//  downloadEndpoint.serverLogicSuccess { paths =>
+//    fileService.download(paths)
+//  }
 
-  val endpoints: List[ServerEndpoint[Any, IO]] = List(listServerEndpoint, downloadServerEndpoint)
+  val endpoints: List[ServerEndpoint[Any, IO]] = List(listServerEndpoint)
 }
 
 object Endpoints extends UserEndpoints with LibraryEndpoints with FilesServerEndpoints {
