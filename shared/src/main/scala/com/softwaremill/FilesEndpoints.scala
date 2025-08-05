@@ -20,7 +20,7 @@ trait FilesEndpoints {
 
   val listEndpoint = filesPath.get.out(jsonBody[List[FileEntry]])
 
-  val downloadEndpoint = downloadPath.get.out(rawBinaryBody(FileBody))
+  val downloadEndpoint = downloadPath.get.out(fileBody)
 }
 
 object FilesEndpoints {

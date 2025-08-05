@@ -13,9 +13,8 @@ trait FilesServerEndpoints extends FilesEndpoints {
     fileService.list(paths)
   }
 
-  val downloadServerEndpoint = downloadEndpoint.serverLogic { paths =>
-    println(s"paths: $paths")
-    IO.raiseError(IllegalArgumentException("nope"))
+  val downloadServerEndpoint = downloadEndpoint.serverLogicSuccess { paths =>
+    fileService.download(paths)
   }
 
   val endpoints = List(listServerEndpoint, downloadServerEndpoint)
