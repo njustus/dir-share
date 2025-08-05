@@ -7,12 +7,10 @@ import sttp.tapir.server.ServerEndpoint
 import sttp.tapir.swagger.bundle.SwaggerInterpreter
 
 trait FilesServerEndpoints extends FilesEndpoints {
+  val fileService = FilesService()
+  
   val listServerEndpoint = listEndpoint.serverLogicSuccess { paths =>
-    println(s"paths: $paths")
-    IO.pure(List(
-      FileEntry("a", FileType.File),
-      FileEntry("b", FileType.Directory),
-    ))
+    fileService.list(paths)
   }
 
   val downloadServerEndpoint = downloadEndpoint.serverLogic { paths =>

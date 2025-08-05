@@ -24,11 +24,12 @@ trait FilesEndpoints {
 }
 
 object FilesEndpoints {
-  case class FileEntry(path: String, `type`: FileType)
+  case class FileEntry(path: String,
+                       `type`: FileType)
     derives Encoder, Decoder
 
   enum FileType derives Encoder, Decoder {
-    case File
-    case Directory
+    case File extends FileType
+    case Directory extends FileType
   }
 }
