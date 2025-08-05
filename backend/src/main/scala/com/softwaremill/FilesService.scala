@@ -6,6 +6,7 @@ import FilesEndpoints.*
 import java.nio.file.*
 import scala.jdk.CollectionConverters.given
 import cats.syntax.traverse.*
+import org.http4s.MediaType
 
 class FilesService {
 
@@ -16,7 +17,11 @@ class FilesService {
       println(s"found ${paths.size} entries")
       paths.traverse { path => IO {
         val isDirectory = Files.isDirectory(path)
-        FileEntry(path.toString, if(isDirectory) FileType.Directory else FileType.File)
+        FileEntry(path.toString,
+          if(isDirectory) FileType.Directory else FileType.File,
+          Files.size(path),
+          Option(Files.probeContentType(path))
+        )
       }}
     }
   }
