@@ -18,7 +18,7 @@ inThisBuild(
     organization := "com.github.njustus",
     version := "0.0.1-SNAPSHOT",
     scalacOptions ++= Seq(
-      "-no-indent", "-rewrite"      
+      "-no-indent", "-rewrite"
     ),
     tpolecatExcludeOptions ++= Set(
       ScalacOptions.fatalWarnings
@@ -27,6 +27,7 @@ inThisBuild(
 )
 
 lazy val shared = crossProject(JSPlatform, JVMPlatform)
+  .crossType(CrossType.Pure)
   .in(file("shared"))
   .settings(
     name := "shared",
@@ -35,7 +36,7 @@ lazy val shared = crossProject(JSPlatform, JVMPlatform)
       "com.softwaremill.sttp.tapir" %%% "tapir-json-circe" % TapirVersion,
       "io.circe" %%% "circe-generic" % CirceVersion,
       "io.circe" %%% "circe-parser" % CirceVersion,
-      "io.scalaland" %% "chimney" % "1.6.0",
+      "io.scalaland" %%% "chimney" % "1.6.0",
       "com.softwaremill.macwire" %%% "macros" % "2.6.4",
     )
   )
@@ -81,7 +82,7 @@ lazy val backend = (project in file("backend"))
   .settings(
     fork := true,
     connectInput := true,
-    name := "getshitdone-backend",
+    name := "locale-share-backend",
     libraryDependencies ++= Seq(
       "com.softwaremill.sttp.tapir" %% "tapir-http4s-server" % TapirVersion,
       "com.softwaremill.sttp.tapir" %% "tapir-swagger-ui-bundle" % TapirVersion,
