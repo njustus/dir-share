@@ -6,7 +6,6 @@ import FilesEndpoints.*
 import java.nio.file.*
 import scala.jdk.CollectionConverters.given
 import cats.syntax.traverse.*
-import org.http4s.MediaType
 import sttp.tapir.TapirFile
 
 class FilesService {
@@ -16,14 +15,17 @@ class FilesService {
     println(s"listing: $path")
     contentPaths(path).flatMap { paths =>
       println(s"found ${paths.size} entries")
-      paths.traverse { path => IO {
-        val isDirectory = Files.isDirectory(path)
-        FileEntry(path.toString,
-          if(isDirectory) FileType.Directory else FileType.File,
-          Files.size(path),
-          Option(Files.probeContentType(path))
-        )
-      }}
+      paths.traverse { path =>
+        IO {
+          val isDirectory = Files.isDirectory(path)
+          FileEntry(
+            path.toString,
+            if (isDirectory) FileType.Directory else FileType.File,
+            Files.size(path),
+            Option(Files.probeContentType(path))
+          )
+        }
+      }
     }
   }
 
@@ -31,14 +33,14 @@ class FilesService {
     val path = Paths.get("/", paths.mkString("/"))
     println(s"download: $path")
     IO(Files.isDirectory(path)).flatMap {
-      case true => IO.raiseError(IllegalArgumentException(s"directory not supported"))
-      case _ => IO { path.toFile }
+      case true => IO.raiseError(IllegalArgumentException("directory not supported"))
+      case _    => IO(path.toFile)
     }
   }
 
   private def contentPaths(path: Path) =
     for {
-      stream <- IO { Files.list(path) }
-      list <- IO { stream.toList.asScala }
+      stream <- IO(Files.list(path))
+      list   <- IO(stream.toList.asScala)
     } yield list.toList
 }

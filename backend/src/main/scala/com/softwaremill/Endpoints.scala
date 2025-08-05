@@ -2,22 +2,28 @@ package com.softwaremill
 
 import sttp.tapir.*
 import cats.effect.IO
-import sttp.tapir.RawBodyType.FileBody
 import sttp.tapir.server.ServerEndpoint
 import sttp.tapir.swagger.bundle.SwaggerInterpreter
+import java.io.File
 
 trait FilesServerEndpoints extends FilesEndpoints {
-  val fileService = FilesService()
-  
-  val listServerEndpoint = listEndpoint.serverLogicSuccess { paths =>
+  val fileService: FilesService = FilesService()
+
+  val listServerEndpoint: ServerEndpoint[Any, IO] {
+    type SECURITY_INPUT = Unit; type PRINCIPAL = Unit; type INPUT = List[String]; type ERROR_OUTPUT = Unit;
+    type OUTPUT         = List[FileEntry]
+  } = listEndpoint.serverLogicSuccess { paths =>
     fileService.list(paths)
   }
 
-  val downloadServerEndpoint = downloadEndpoint.serverLogicSuccess { paths =>
+  val downloadServerEndpoint: ServerEndpoint[Any, IO] {
+    type SECURITY_INPUT = Unit; type PRINCIPAL = Unit; type INPUT = List[String]; type ERROR_OUTPUT = Unit;
+    type OUTPUT         = File
+  } = downloadEndpoint.serverLogicSuccess { paths =>
     fileService.download(paths)
   }
 
-  val endpoints = List(listServerEndpoint, downloadServerEndpoint)
+  val endpoints: List[ServerEndpoint[Any, IO]] = List(listServerEndpoint, downloadServerEndpoint)
 }
 
 object Endpoints extends UserEndpoints with LibraryEndpoints with FilesServerEndpoints {

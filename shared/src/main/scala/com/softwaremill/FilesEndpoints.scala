@@ -2,9 +2,9 @@ package com.softwaremill
 
 import io.circe.{Decoder, Encoder}
 import sttp.tapir.*
-import sttp.tapir.RawBodyType.FileBody
 import sttp.tapir.json.circe.jsonBody
 import sttp.tapir.generic.auto.*
+import java.io.File
 
 trait FilesEndpoints {
   import FilesEndpoints.*
@@ -18,9 +18,9 @@ trait FilesEndpoints {
   private val downloadPath = basePath.in("download")
     .in(paths)
 
-  val listEndpoint = filesPath.get.out(jsonBody[List[FileEntry]])
+  val listEndpoint: Endpoint[Unit, List[String], Unit, List[FileEntry], Any] = filesPath.get.out(jsonBody[List[FileEntry]])
 
-  val downloadEndpoint = downloadPath.get.out(fileBody)
+  val downloadEndpoint: Endpoint[Unit, List[String], Unit, File, Any] = downloadPath.get.out(fileBody)
 }
 
 object FilesEndpoints {
