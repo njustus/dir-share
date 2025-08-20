@@ -32,7 +32,7 @@ object ClientMain extends com.softwaremill.FilesEndpoints {
         className := "list-inside list-disc",
         children <-- contentVar.toObservable.map { list =>
           list.map { entry =>
-            li(span(className := "font-semibold", entry.`type`.toString), " - ", entry.path)
+            li(span(className := "font-semibold", entry.`type`.toString), " - ", entry.path, " == ", entry.contentType)
           }
         }
       )
