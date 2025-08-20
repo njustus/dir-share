@@ -7,28 +7,28 @@ import sttp.client4.fetch.FetchBackend
 import sttp.tapir.client.sttp4.SttpClientInterpreter
 
 import scala.concurrent.{ExecutionContext, Future}
+import org.scalajs.dom.HTMLDivElement
+import com.raquo.laminar.nodes.ReactiveHtmlElement
 
 class FrontRoutes()(using ExecutionContext) {
   import com.softwaremill.macwire.*
 
   private lazy val adapter = {
-    val inter = SttpClientInterpreter()
+    val inter                             = SttpClientInterpreter()
     val backend: WebSocketBackend[Future] = FetchBackend()
     new SttpClientAdapter(inter, backend)
   }
 
-  def routes = {
-    div(
-      pathPrefix("listing") {
-        firstMatch(
-          extractUnmatchedPath { paths =>
-            wireRec[ListingComponent].render(paths)
-          },
-          pathEnd {
-            println(s"render path end")
-            div("path end")
-          })
-      }
-    )
-  }
+  def routes: ReactiveHtmlElement[HTMLDivElement] =
+    div(pathPrefix("listing") {
+      firstMatch(
+        extractUnmatchedPath { paths =>
+          wireRec[ListingComponent].render(paths)
+        },
+        pathEnd {
+          println("render path end")
+          div("path end")
+        }
+      )
+    })
 }
