@@ -22,7 +22,7 @@ class ListingComponent(listingClient: ListEndpointsClient)(using ExecutionContex
         className := "list-inside list-disc",
         children <-- contentVar.toObservable.map { list =>
           list.map { entry =>
-            li(span(className := "font-semibold", entry.`type`.toString), " - ", entry.path, " == ", entry.contentType)
+            li(span(className := "font-semibold", entry.`type`.toString), " - ", entry.name, " == ", entry.contentType)
           }
         }
       )

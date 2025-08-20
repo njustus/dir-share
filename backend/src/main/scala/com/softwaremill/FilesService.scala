@@ -20,6 +20,7 @@ class FilesService {
           val isDirectory = Files.isDirectory(path)
           FileEntry(
             path.toString,
+            path.getFileName.toString,
             if (isDirectory) FileType.Directory else FileType.File,
             Files.size(path),
             Option(Files.probeContentType(path))

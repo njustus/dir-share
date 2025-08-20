@@ -26,7 +26,7 @@ trait FilesEndpoints {
 }
 
 object FilesEndpoints {
-  case class FileEntry(path: String, `type`: FileType, sizeInBytes: Long, contentType: Option[String])
+  case class FileEntry(path: String, name: String, `type`: FileType, sizeInBytes: Long, contentType: Option[String])
       derives Encoder,
         Decoder
 
