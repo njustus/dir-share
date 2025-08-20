@@ -1,7 +1,8 @@
 package com.github.njustus
 
 import com.raquo.laminar.api.L.*
-import com.softwaremill.FilesEndpoints.FileEntry
+import com.softwaremill.FilesEndpoints.{FileEntry, FileType}
+import com.softwaremill.FilesEndpoints.FileType.File
 import sttp.tapir.client.sttp4.SttpClientInterpreter
 
 import scala.concurrent.ExecutionContext
@@ -21,8 +22,11 @@ class ListingComponent(listingClient: ListEndpointsClient)(using ExecutionContex
       ul(
         className := "list-inside list-disc",
         children <-- contentVar.toObservable.map { list =>
-          list.map { entry =>
-            li(span(className := "font-semibold", entry.`type`.toString), " - ", entry.name, " == ", entry.contentType)
+          list.map {
+            case entry if entry.`type` == FileType.File =>
+              li(span(className := "font-semibold", entry.name, " == ", entry.contentType))
+            case entry =>
+              li(a(className := "font-semibold",  href := s"/listing${entry.path}", entry.name))
           }
         }
       )
