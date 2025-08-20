@@ -37,7 +37,7 @@ lazy val shared = crossProject(JSPlatform, JVMPlatform)
       "io.circe" %%% "circe-generic" % CirceVersion,
       "io.circe" %%% "circe-parser" % CirceVersion,
       "io.scalaland" %%% "chimney" % "1.6.0",
-      "com.softwaremill.macwire" %%% "macros" % "2.6.4",
+      "com.softwaremill.macwire" %%% "macros" % "2.6.6",
     )
   )
 
