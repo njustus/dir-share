@@ -9,7 +9,7 @@ trait FilesEndpoints {
   import FilesEndpoints.*
   export FilesEndpoints.*
 
-  private val basePath = endpoint.in("files")
+  private val basePath = endpoint.in("api").in("files")
 
   private val filesPath = basePath
     .in("listing")

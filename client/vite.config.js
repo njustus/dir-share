@@ -2,7 +2,7 @@ import {defineConfig} from 'vite';
 import tailwindcss from '@tailwindcss/vite';
 
 const backendServer = {
-        "target": "http://localhost:9050",
+        "target": "http://localhost:8080",
         "secure": false,
         "logLevel": "debug",
         "changeOrigin": true
@@ -15,8 +15,7 @@ export default defineConfig({
   build: {},
   server: {
     proxy: {
-      "/grpc": backendServer,
-      "/dev": backendServer
+      "/api": backendServer
     }
   }
 });

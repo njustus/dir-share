@@ -6,7 +6,7 @@ import org.http4s.ember.server.EmberServerBuilder
 import org.http4s.server.Router
 import sttp.tapir.server.http4s.Http4sServerInterpreter
 
-object Main extends IOApp {
+object BackendMain extends IOApp {
 
   override def run(args: List[String]): IO[ExitCode] = {
 
