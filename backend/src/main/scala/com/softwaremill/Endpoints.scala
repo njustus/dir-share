@@ -16,6 +16,10 @@ trait FilesServerEndpoints extends FilesEndpoints {
     fileService.list(paths)
   }
 
+  val uploadServerEndpoint = uploadEndpoint.serverLogicSuccess { case (path, FilesEndpoints.MultipartUpload(file)) =>
+    fileService.upload(path, file)
+  }
+
   lazy val downloadServerEndpoint: ServerEndpoint[Any, IO] {
     type SECURITY_INPUT = Unit; type PRINCIPAL = Unit; type INPUT = List[String]; type ERROR_OUTPUT = Unit;
     type OUTPUT         = File
@@ -24,7 +28,7 @@ trait FilesServerEndpoints extends FilesEndpoints {
 //    fileService.download(paths)
 //  }
 
-  val endpoints: List[ServerEndpoint[Any, IO]] = List(listServerEndpoint)
+  val endpoints: List[ServerEndpoint[Any, IO]] = List(listServerEndpoint, uploadServerEndpoint)
 }
 
 object Endpoints extends UserEndpoints with LibraryEndpoints with FilesServerEndpoints {
