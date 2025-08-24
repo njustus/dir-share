@@ -24,20 +24,27 @@ object DirectoryItem {
   def render(entry: FileEntry) = {
     val iconSpan = icon(entry)
     li(
-      className:="list-row",
+      className := "list-row",
       div(span(className := "size-10, rounded-box", iconSpan)),
-      div(className:="list-col-grow",
+      div(className := "list-col-grow",
         div(entry.name),
-        div(className:="text-xs uppercase font-semibold opacity-60", entry.contentType.getOrElse("unknown"))
+        div(className := "text-xs uppercase font-semibold opacity-60", entry.contentType.getOrElse("unknown"))
       ),
-      button(className:="btn btn-square btn-ghost",
+      button(className := "btn btn-square btn-ghost",
         span("download")
       )
     )
   }
 
-  private def icon(entry: FileEntry) = entry.`type` match {
-    case FileType.Directory => MatIcon("folder")
-    case FileType.File => MatIcon("draft")
+  private def icon(entry: FileEntry) = handleFileType(entry)(
+    _ => MatIcon("folder"),
+    _ => MatIcon("draft")
+  )
+
+  private def handleFileType(entry: FileEntry)(
+    onDirectory: (FileEntry) => ReactiveHtmlElement[?],
+    onFile: (FileEntry) => ReactiveHtmlElement[?]) = entry.`type` match {
+    case FileType.Directory => onDirectory(entry)
+    case FileType.File => onFile(entry)
   }
 }
