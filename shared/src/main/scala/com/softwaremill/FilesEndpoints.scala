@@ -10,7 +10,7 @@ import sttp.tapir.generic.auto.*
 trait FilesEndpoints {
   import FilesEndpoints.*
   export FilesEndpoints.*
-  
+
   private val basePath = endpoint.in("api").in("files")
 
   private val filesPath = basePath
@@ -20,6 +20,7 @@ trait FilesEndpoints {
   val uploadEndpoint: Endpoint[Unit, (List[String], MultipartUpload), Unit, String, Any] = basePath
     .in("upload")
     .in(paths)
+    .post
       .in(
       multipartBody[MultipartUpload])
       .out(stringBody)
@@ -27,13 +28,11 @@ trait FilesEndpoints {
 
   val listEndpoint: Endpoint[Unit, List[String], Unit, List[FileEntry], Any] =
     filesPath.get.out(jsonBody[List[FileEntry]])
-
-//  val downloadEndpoint = downloadPath.get.out(binaryBody(RawBodyType.ByteArrayBody))
 }
 
 object FilesEndpoints {
   case class MultipartUpload(file: Part[TapirFile])
-  
+
   case class FileEntry(path: String, name: String, `type`: FileType, sizeInBytes: Long, contentType: Option[String])
       derives Encoder,
         Decoder
