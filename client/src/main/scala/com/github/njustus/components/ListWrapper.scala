@@ -31,7 +31,18 @@ object DirectoryItem {
         div(className := "text-xs uppercase font-semibold opacity-60", entry.contentType.getOrElse("unknown"))
       ),
       button(className := "btn btn-square btn-ghost",
-        span("download")
+        handleFileType(entry)(
+          e => a(
+            href := s"/listing${e.path}",
+            MatIcon("folder_open")
+          ),
+          e => a(
+            //TODO download?
+            href := s"/api/download${e.path}",
+            target := "_blank",
+            MatIcon("download")
+          )
+        )
       )
     )
   }
