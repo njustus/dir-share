@@ -1,5 +1,6 @@
 package com.github.njustus
 
+import com.github.njustus.components.{DirectoryItem, ListWrapper}
 import com.raquo.laminar.api.L.*
 import com.softwaremill.FilesEndpoints.{FileEntry, FileType, MultipartUpload}
 
@@ -43,7 +44,8 @@ class ListingComponent(listingClient: ListEndpointsClient)(using ExecutionContex
     val contentVar = Var[List[FileEntry]](List.empty)
 
     listingClient.list(paths.toList).foreach { entries =>
-      contentVar.set(entries)
+      val sorted = entries.sortBy(_.`type`)
+      contentVar.set(sorted)
     }
 
     def handle(file: dom.File) = {
@@ -57,16 +59,10 @@ class ListingComponent(listingClient: ListEndpointsClient)(using ExecutionContex
       className := "p-6",
       h1(s"Contents of: $path"),
       fileUploadComponent(handle),
-      ul(
-        className := "list-inside list-disc",
-        children <-- contentVar.toObservable.map { list =>
-          list.map {
-            case entry if entry.`type` == FileType.File =>
-              li(span(className := "font-semibold", entry.name, " == ", entry.contentType))
-            case entry =>
-              li(a(className := "font-semibold", href := s"/listing${entry.path}", entry.name))
-          }
-        }
+      ListWrapper.render("Contents",
+        contentVar.toObservable.map { list =>
+          list.map(DirectoryItem.render)
+        }.changes
       )
     )
   }

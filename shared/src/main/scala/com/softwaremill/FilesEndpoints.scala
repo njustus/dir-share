@@ -38,7 +38,10 @@ object FilesEndpoints {
         Decoder
 
   enum FileType derives Encoder, Decoder {
-    case File      extends FileType
     case Directory extends FileType
+    case File      extends FileType
   }
+
+  given Ordering[FileType] = Ordering.by(_.ordinal)
+  given Ordering[FileEntry] = Ordering.by(entry => (entry.`type`, entry.name))
 }
