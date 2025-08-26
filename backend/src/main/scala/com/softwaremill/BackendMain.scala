@@ -1,16 +1,19 @@
 package com.softwaremill
 
 import cats.effect.{ExitCode, IO, IOApp}
+import cats.implicits.*
 import com.comcast.ip4s.{Host, Port, port}
 import org.http4s.ember.server.EmberServerBuilder
 import org.http4s.server.Router
 import sttp.tapir.server.http4s.Http4sServerInterpreter
+import org.http4s.server.staticcontent.*
 
 object BackendMain extends IOApp {
 
   override def run(args: List[String]): IO[ExitCode] = {
-
-    val routes = Http4sServerInterpreter[IO]().toRoutes(Endpoints.all)
+    val staticRoutes = resourceServiceBuilder[IO]("/public").toRoutes
+    val routes = (Http4sServerInterpreter[IO]().toRoutes(Endpoints.all)
+                  <+> staticRoutes)
 
     val port = sys.env
       .get("HTTP_PORT")
