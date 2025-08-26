@@ -9,8 +9,6 @@ import cats.syntax.traverse.*
 import sttp.model.Part
 import sttp.tapir.TapirFile
 
-import java.io.File
-
 class FilesService {
 
   def list(paths: List[String]): IO[List[FileEntry]] = {
@@ -42,8 +40,8 @@ class FilesService {
     }
   }
 
-  def upload(paths: List[String], tapirFile: Part[TapirFile]) = IO {
-    val path = paths.toPath.resolve(tapirFile.fileName.get) //TODO handle none
+  def upload(paths: List[String], tapirFile: Part[TapirFile]): IO[String] = IO {
+    val path   = paths.toPath.resolve(tapirFile.fileName.get) // TODO handle none
     val target = Files.copy(tapirFile.body.toPath, path)
     println(s"Uploaded ${tapirFile.name} into $target")
     s"Uploaded into $target"
@@ -54,7 +52,6 @@ class FilesService {
       stream <- IO(Files.list(path))
       list   <- IO(stream.toList.asScala)
     } yield list.toList
-
 
   extension (paths: List[String]) {
     private def toPath: Path = Paths.get("/", paths.mkString("/"))

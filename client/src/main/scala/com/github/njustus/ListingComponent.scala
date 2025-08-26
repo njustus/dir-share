@@ -2,16 +2,13 @@ package com.github.njustus
 
 import com.github.njustus.components.{DirectoryItem, ListWrapper}
 import com.raquo.laminar.api.L.*
-import com.softwaremill.FilesEndpoints.{FileEntry, FileType, MultipartUpload}
+import com.softwaremill.FilesEndpoints.{FileEntry, MultipartUpload}
 
 import scala.concurrent.ExecutionContext
-import org.scalajs.dom.{Event, File, FileList, HTMLDivElement, InputEvent, console, window}
+import org.scalajs.dom.{File, HTMLDivElement, console, window}
 import com.raquo.laminar.nodes.ReactiveHtmlElement
 import org.scalajs.dom
 import sttp.model.Part
-import sttp.tapir.TapirFile
-
-import scala.collection.mutable.ArrayBuffer
 
 class ListingComponent(listingClient: ListEndpointsClient)(using ExecutionContext) {
 
@@ -29,13 +26,11 @@ class ListingComponent(listingClient: ListEndpointsClient)(using ExecutionContex
     div(
       input(
         className := "file-input file-input-primary",
-        `type` := "file",
-        multiple := false,
+        `type`    := "file",
+        multiple  := false,
         inContext(thisNode => onInput.mapTo(thisNode.ref.files.toList) --> handle)
       ),
-      p(
-        "Select a file to upload."
-      )
+      p("Select a file to upload.")
     )
   }
 
@@ -48,18 +43,18 @@ class ListingComponent(listingClient: ListEndpointsClient)(using ExecutionContex
       contentVar.set(sorted)
     }
 
-    def handle(file: dom.File) = {
+    def handle(file: dom.File) =
       listingClient.upload(paths.toList, MultipartUpload(Part(file.name, file))).onComplete {
         case util.Success(value) => window.location.reload()
-        case util.Failure(ex) => console.error(ex)
+        case util.Failure(ex)    => console.error(ex)
       }
-    }
 
     div(
       className := "p-6",
       h1(s"Contents of: $path"),
       fileUploadComponent(handle),
-      ListWrapper.render("Contents",
+      ListWrapper.render(
+        "Contents",
         contentVar.toObservable.map { list =>
           list.map(DirectoryItem.render)
         }.changes

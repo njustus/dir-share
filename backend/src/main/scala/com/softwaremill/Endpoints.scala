@@ -16,7 +16,10 @@ trait FilesServerEndpoints extends FilesEndpoints {
     fileService.list(paths)
   }
 
-  val uploadServerEndpoint = uploadEndpoint.serverLogicSuccess { case (path, FilesEndpoints.MultipartUpload(file)) =>
+  val uploadServerEndpoint: ServerEndpoint[Any, IO] {
+    type SECURITY_INPUT = Unit; type PRINCIPAL = Unit; type INPUT = (List[String], MultipartUpload);
+    type ERROR_OUTPUT   = Unit; type OUTPUT    = String
+  } = uploadEndpoint.serverLogicSuccess { case (path, FilesEndpoints.MultipartUpload(file)) =>
     fileService.upload(path, file)
   }
 

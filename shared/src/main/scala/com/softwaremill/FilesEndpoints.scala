@@ -3,7 +3,6 @@ package com.softwaremill
 import io.circe.{Decoder, Encoder}
 import sttp.model.Part
 import sttp.tapir.*
-import sttp.tapir.model.*
 import sttp.tapir.json.circe.jsonBody
 import sttp.tapir.generic.auto.*
 
@@ -21,10 +20,8 @@ trait FilesEndpoints {
     .in("upload")
     .in(paths)
     .post
-      .in(
-      multipartBody[MultipartUpload])
-      .out(stringBody)
-
+    .in(multipartBody[MultipartUpload])
+    .out(stringBody)
 
   val listEndpoint: Endpoint[Unit, List[String], Unit, List[FileEntry], Any] =
     filesPath.get.out(jsonBody[List[FileEntry]])
@@ -42,6 +39,6 @@ object FilesEndpoints {
     case File      extends FileType
   }
 
-  given Ordering[FileType] = Ordering.by(_.ordinal)
+  given Ordering[FileType]  = Ordering.by(_.ordinal)
   given Ordering[FileEntry] = Ordering.by(entry => (entry.`type`, entry.name))
 }
