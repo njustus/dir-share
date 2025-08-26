@@ -12,7 +12,9 @@ export default defineConfig({
   plugins: [
     tailwindcss()
   ],
-  build: {},
+  build: {
+    outDir: './dist/public',
+  },
   server: {
     proxy: {
       "/api": backendServer

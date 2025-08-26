@@ -82,6 +82,7 @@ lazy val backend = (project in file("backend"))
     fork := true,
     connectInput := true,
     name := "locale-share-backend",
+    (Compile/unmanagedResourceDirectories) += (client.base.getAbsoluteFile / "dist"),
     libraryDependencies ++= Seq(
       "com.softwaremill.sttp.tapir" %% "tapir-http4s-server" % TapirVersion,
       "com.softwaremill.sttp.tapir" %% "tapir-swagger-ui-bundle" % TapirVersion,

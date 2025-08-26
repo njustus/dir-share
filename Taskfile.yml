@@ -11,6 +11,17 @@ tasks:
     dir: ./client
     cmds:
       - npm start
-  down:
+
+  build-backend:
+    aliases: [build]
+    deps:
+      - task: build-client
     cmds:
-      - docker-compose down
+      - sbt ";backend/clean;backend/Universal/packageBin"
+
+  build-client:
+    cmds:
+      - sbt ";clean;client/fastLinkJS"
+      - cd ./client && npm run build && cd ..
+    generates:
+      - ./client/dist
