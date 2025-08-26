@@ -18,6 +18,8 @@ class FrontRoutes()(using ExecutionContext) {
     val backend: WebSocketBackend[Future] = FetchBackend()
     new SttpClientAdapter(inter, backend)
   }
+//TODO redirect to /listing -- return PWD from backend if no path provided
+//TODO restrict backend to PWD
 
   def routes: ReactiveHtmlElement[HTMLDivElement] =
     div(pathPrefix("listing") {
