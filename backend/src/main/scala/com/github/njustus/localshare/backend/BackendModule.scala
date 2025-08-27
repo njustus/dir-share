@@ -2,7 +2,6 @@ package com.github.njustus.localshare.backend
 
 import com.softwaremill.macwire.*
 import cats.effect.IO
-import com.github.njustus.localshare.shared.FilesEndpoints.{FileEntry, MultipartUpload}
 import com.github.njustus.localshare.*
 import org.http4s.{HttpRoutes, Response, StaticFile}
 import org.http4s.server.staticcontent.*
@@ -17,9 +16,7 @@ class BackendModule(cliArgs: CliArgs) extends Endpoints with StrictLogging {
   private val filesServerEndpoints = wireRec[FilesServerEndpoints]
 
   override def endpoints: List[ServerEndpoint[Any, IO]] = {
-    val apiEndpoints: List[ServerEndpoint[Any, IO]] = List(
-      filesServerEndpoints.endpoints
-    ).flatten
+    val apiEndpoints: List[ServerEndpoint[Any, IO]] = List(filesServerEndpoints.endpoints).flatten
 
     val docEndpoints: List[ServerEndpoint[Any, IO]] = SwaggerInterpreter()
       .fromServerEndpoints[IO](apiEndpoints, "local-share", "1.0.0")

@@ -6,11 +6,7 @@ import java.nio.file.{Path, Paths}
 import cats.syntax.all.*
 import com.comcast.ip4s.{Host, Port}
 
-final case class CliArgs(
-                          port: Port,
-                          interface: Host,
-                          cwd: Path
-                        ) {
+final case class CliArgs(port: Port, interface: Host, cwd: Path) {
   override def toString: String = s"$interface:$port - $cwd"
 }
 
@@ -31,7 +27,8 @@ object CliArgs {
       .map(_.get)
 
   private val cwdArg: Opts[Path] =
-    Opts.argument[String](metavar = "cwd")
+    Opts
+      .argument[String](metavar = "cwd")
       .map(Paths.get(_))
       .withDefault(Paths.get(System.getProperty("user.dir")))
       .map(_.toAbsolutePath)

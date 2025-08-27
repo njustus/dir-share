@@ -1,12 +1,10 @@
 package com.github.njustus.localshare.backend
 
 import cats.effect.IO
-import com.github.njustus.localshare.shared.FilesEndpoints.{FileEntry, MultipartUpload}
 import com.github.njustus.localshare.*
 import com.github.njustus.localshare.shared.FilesEndpoints
 import sttp.tapir.*
 import sttp.tapir.server.ServerEndpoint
-import sttp.tapir.swagger.bundle.SwaggerInterpreter
 
 import java.io.File
 
@@ -26,10 +24,7 @@ class FilesServerEndpoints(fileService: FilesService) extends FilesEndpoints wit
     fileService.upload(path, file)
   }
 
-  private lazy val downloadServerEndpoint: ServerEndpoint[Any, IO] {
-    type SECURITY_INPUT = Unit; type PRINCIPAL = Unit; type INPUT = List[String]; type ERROR_OUTPUT = Unit;
-    type OUTPUT         = File
-  } = ???
+  ???
 //  downloadEndpoint.serverLogicSuccess { paths =>
 //    fileService.download(paths)
 //  }
