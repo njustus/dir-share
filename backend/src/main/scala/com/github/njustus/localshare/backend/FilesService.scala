@@ -3,19 +3,20 @@ package com.github.njustus.localshare.backend
 import cats.effect.*
 import cats.syntax.traverse.*
 import com.github.njustus.localshare.shared.FilesEndpoints.{FileEntry, FileType}
+import com.typesafe.scalalogging.StrictLogging
 import sttp.model.Part
 import sttp.tapir.TapirFile
 
 import java.nio.file.*
 import scala.jdk.CollectionConverters.given
 
-class FilesService {
+class FilesService(cliArgs: CliArgs) extends StrictLogging {
 
   def list(paths: List[String]): IO[List[FileEntry]] = {
-    val path = paths.toPath
-    println(s"listing: $path")
+    val path = cliArgs.cwd.resolve(paths.toPath)
+    logger.info(s"listing: $path")
     contentPaths(path).flatMap { paths =>
-      println(s"found ${paths.size} entries")
+      logger.info(s"found ${paths.size} entries")
       paths.traverse { path =>
         IO {
           val isDirectory = Files.isDirectory(path)
@@ -32,8 +33,8 @@ class FilesService {
   }
 
   def download(paths: List[String]): IO[TapirFile] = {
-    val path = paths.toPath
-    println(s"download: $path")
+    val path = cliArgs.cwd.resolve(paths.toPath)
+    logger.info(s"download: $path")
     IO(Files.isDirectory(path)).flatMap {
       case true => IO.raiseError(IllegalArgumentException("directory not supported"))
       case _    => IO(path.toFile)
@@ -41,9 +42,9 @@ class FilesService {
   }
 
   def upload(paths: List[String], tapirFile: Part[TapirFile]): IO[String] = IO {
-    val path   = paths.toPath.resolve(tapirFile.fileName.get) // TODO handle none
+    val path   = cliArgs.cwd.resolve(paths.toPath.resolve(tapirFile.fileName.get)) // TODO handle none
     val target = Files.copy(tapirFile.body.toPath, path)
-    println(s"Uploaded ${tapirFile.name} into $target")
+    logger.info(s"Uploaded ${tapirFile.name} into $target")
     s"Uploaded into $target"
   }
 
@@ -54,6 +55,6 @@ class FilesService {
     } yield list.toList
 
   extension (paths: List[String]) {
-    private def toPath: Path = Paths.get("/", paths.mkString("/"))
+    private def toPath: Path = Paths.get(paths.mkString("/"))
   }
 }

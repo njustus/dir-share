@@ -6,6 +6,7 @@ val Http4sVersion = "0.23.30"
 val CirceVersion = "0.14.10"
 val LogbackVersion = "1.5.6"
 val TapirVersion = "1.11.40"
+val DeclineVersion = "2.5.0"
 
 inThisBuild(
   List(
@@ -96,6 +97,8 @@ lazy val backend = (project in file("backend"))
 
       "ch.qos.logback" % "logback-classic" % LogbackVersion,
       "com.typesafe.scala-logging" %% "scala-logging" % "3.9.4",
+      "com.monovore" %% "decline" % DeclineVersion,
+      "com.monovore" %% "decline-effect" % DeclineVersion
     ),
     addCommandAlias("cleanRun", ";clean;run"),
     addCommandAlias("cleanup", ";clean;scalafix;scalafmt"),
