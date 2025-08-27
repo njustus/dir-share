@@ -1,4 +1,4 @@
-package com.github.njustus
+package com.github.njustus.client
 
 import org.scalajs.dom
 import sttp.client4.{Backend, UriContext}

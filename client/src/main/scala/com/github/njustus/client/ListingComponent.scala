@@ -1,14 +1,14 @@
-package com.github.njustus
+package com.github.njustus.client
 
-import com.github.njustus.components.{DirectoryItem, ListWrapper}
+import com.github.njustus.client.components.{DirectoryItem, ListWrapper}
+import com.github.njustus.localshare.shared.FilesEndpoints.{FileEntry, MultipartUpload}
 import com.raquo.laminar.api.L.*
-import com.softwaremill.FilesEndpoints.{FileEntry, MultipartUpload}
-
-import scala.concurrent.ExecutionContext
-import org.scalajs.dom.{File, HTMLDivElement, console, window}
 import com.raquo.laminar.nodes.ReactiveHtmlElement
 import org.scalajs.dom
+import org.scalajs.dom.{File, HTMLDivElement, console, window}
 import sttp.model.Part
+
+import scala.concurrent.ExecutionContext
 
 class ListingComponent(listingClient: ListEndpointsClient)(using ExecutionContext) {
 

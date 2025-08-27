@@ -1,9 +1,13 @@
-package com.softwaremill
+package com.github.njustus.localshare.backend
 
-import sttp.tapir.*
 import cats.effect.IO
+import com.github.njustus.localshare.shared.FilesEndpoints.{FileEntry, MultipartUpload}
+import com.github.njustus.localshare.*
+import com.github.njustus.localshare.shared.{FilesEndpoints, Library, LibraryEndpoints, UserEndpoints}
+import sttp.tapir.*
 import sttp.tapir.server.ServerEndpoint
 import sttp.tapir.swagger.bundle.SwaggerInterpreter
+
 import java.io.File
 
 trait FilesServerEndpoints extends FilesEndpoints {

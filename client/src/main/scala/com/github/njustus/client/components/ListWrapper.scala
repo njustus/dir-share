@@ -1,8 +1,7 @@
-package com.github.njustus.components
+package com.github.njustus.client.components
 
+import com.github.njustus.localshare.shared.FilesEndpoints.{FileEntry, FileType}
 import com.raquo.laminar.api.L.*
-import com.softwaremill.FilesEndpoints.{FileEntry, FileType}
-
 import com.raquo.laminar.nodes.ReactiveHtmlElement
 import org.scalajs.dom.HTMLLIElement
 

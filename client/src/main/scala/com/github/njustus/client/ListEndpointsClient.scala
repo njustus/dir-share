@@ -1,6 +1,6 @@
-package com.github.njustus
+package com.github.njustus.client
 
-import com.softwaremill.FilesEndpoints
+import com.github.njustus.localshare.shared.FilesEndpoints
 
 import scala.concurrent.{ExecutionContext, Future}
 

@@ -1,13 +1,13 @@
-package com.softwaremill
+package com.github.njustus.localshare.backend
 
 import cats.effect.*
-import FilesEndpoints.*
+import cats.syntax.traverse.*
+import com.github.njustus.localshare.shared.FilesEndpoints.{FileEntry, FileType}
+import sttp.model.Part
+import sttp.tapir.TapirFile
 
 import java.nio.file.*
 import scala.jdk.CollectionConverters.given
-import cats.syntax.traverse.*
-import sttp.model.Part
-import sttp.tapir.TapirFile
 
 class FilesService {
 

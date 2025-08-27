@@ -1,4 +1,4 @@
-package com.softwaremill
+package com.github.njustus.localshare.shared
 
 import sttp.tapir.*
 

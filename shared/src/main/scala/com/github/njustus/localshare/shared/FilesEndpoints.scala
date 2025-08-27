@@ -1,10 +1,10 @@
-package com.softwaremill
+package com.github.njustus.localshare.shared
 
 import io.circe.{Decoder, Encoder}
 import sttp.model.Part
 import sttp.tapir.*
-import sttp.tapir.json.circe.jsonBody
 import sttp.tapir.generic.auto.*
+import sttp.tapir.json.circe.jsonBody
 
 trait FilesEndpoints {
   import FilesEndpoints.*

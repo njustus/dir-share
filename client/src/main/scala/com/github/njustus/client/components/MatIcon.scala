@@ -1,4 +1,4 @@
-package com.github.njustus.components
+package com.github.njustus.client.components
 
 import com.raquo.laminar.api.L.*
 import com.raquo.laminar.nodes.ReactiveHtmlElement
