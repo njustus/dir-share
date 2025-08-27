@@ -12,17 +12,7 @@ import sttp.tapir.server.http4s.Http4sServerInterpreter
 object BackendMain extends IOApp {
 
   override def run(args: List[String]): IO[ExitCode] = {
-    val staticRoutes = resourceServiceBuilder[IO]("/public").toRoutes
-
-    val fallbackRoute: HttpRoutes[IO] = HttpRoutes.of[IO] { case req =>
-      StaticFile
-        .fromResource("/public/index.html", Some(req))
-        .getOrElse(Response.notFound)
-    }
-
-    val routes = (Http4sServerInterpreter[IO]().toRoutes(Endpoints.all)
-      <+> staticRoutes <+> fallbackRoute)
-
+    val module = BackendModule()
     val port = sys.env
       .get("HTTP_PORT")
       .flatMap(_.toIntOption)
@@ -33,7 +23,7 @@ object BackendMain extends IOApp {
       .default[IO]
       .withHost(Host.fromString("localhost").get)
       .withPort(port)
-      .withHttpApp(Router("/" -> routes).orNotFound)
+      .withHttpApp(Router("/" -> module.routes).orNotFound)
       .build
       .use { server =>
         for {
