@@ -6,8 +6,19 @@ import java.nio.file.{Path, Paths}
 import cats.syntax.all.*
 import com.comcast.ip4s.{Host, Port}
 
-final case class CliArgs(port: Port, interface: Host, cwd: Path) {
-  override def toString: String = s"$interface:$port - $cwd"
+import scala.util.Random
+
+final case class CliArgs(port: Port, interface: Host, cwd: Path, secured: Boolean) {
+  override def toString: String = s"$interface:$port - $cwd - pwd: $password"
+
+  lazy val password: Option[String] =
+    if (!secured) {
+      None
+    } else {
+      val list = Random.alphanumeric.take(50).toList
+      val pwd = Random.shuffle(list).take(8).mkString
+      Some(pwd)
+    }
 }
 
 object CliArgs {
@@ -33,6 +44,9 @@ object CliArgs {
       .withDefault(Paths.get(System.getProperty("user.dir")))
       .map(_.toAbsolutePath)
 
+  private val securedArg: Opts[Boolean] = Opts.flag("secure", short = "s", help = "Secured by password")
+    .orTrue
+
   val cliArgs: Opts[CliArgs] =
-    (portOpt, interfaceOpt, cwdArg).mapN(CliArgs.apply)
+    (portOpt, interfaceOpt, cwdArg, securedArg).mapN(CliArgs.apply)
 }

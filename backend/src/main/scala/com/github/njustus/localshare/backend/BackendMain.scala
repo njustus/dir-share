@@ -21,11 +21,15 @@ object BackendMain extends CommandIOApp(name = "local-share", header = "local-sh
       .build
       .use { server =>
         for {
-          _ <- IO(
-                 logger.info(
-                   s"Go to http://localhost:${server.address.getPort}/docs to open SwaggerUI. Press ENTER key to exit."
-                 )
-               )
+          _ <- IO {
+            logger.info(
+              s"Go to http://localhost:${server.address.getPort}/docs to open SwaggerUI. Press ENTER key to exit."
+            )
+            cliArgs.password match {
+              case Some(pwd) => println(s"Endpoints secured using password: $pwd")
+              case None => println("Endpoints NOT secured - readonly access")
+            }
+          }
           _ <- IO.readLine
         } yield ()
       }
