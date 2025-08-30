@@ -24,7 +24,6 @@ class FilesServerEndpoints(fileService: FilesService) extends FilesEndpoints wit
     fileService.upload(path, file)
   }
 
-  ???
 //  downloadEndpoint.serverLogicSuccess { paths =>
 //    fileService.download(paths)
 //  }

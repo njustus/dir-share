@@ -34,7 +34,7 @@ class ListingComponent(listingClient: ListEndpointsClient)(using ExecutionContex
     )
   }
 
-  def render(paths: Seq[String]): ReactiveHtmlElement[HTMLDivElement] = {
+  def render(paths: Seq[String] = Seq()): ReactiveHtmlElement[HTMLDivElement] = {
     val path       = paths.mkString("/")
     val contentVar = Var[List[FileEntry]](List.empty)
 
