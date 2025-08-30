@@ -12,8 +12,10 @@ import scala.jdk.CollectionConverters.given
 
 class FilesService(cliArgs: CliArgs) extends StrictLogging {
 
+  private val basePath = cliArgs.cwd
+
   def list(paths: List[String]): IO[List[FileEntry]] = {
-    val path = cliArgs.cwd.resolve(paths.toPath)
+    val path = basePath.resolve(paths.toPath)
     logger.info(s"listing: $path")
     contentPaths(path).flatMap { paths =>
       logger.info(s"found ${paths.size} entries")
@@ -21,7 +23,7 @@ class FilesService(cliArgs: CliArgs) extends StrictLogging {
         IO {
           val isDirectory = Files.isDirectory(path)
           FileEntry(
-            path.toString,
+            "/"+basePath.relativize(path).toString,
             path.getFileName.toString,
             if (isDirectory) FileType.Directory else FileType.File,
             Files.size(path),
@@ -33,7 +35,7 @@ class FilesService(cliArgs: CliArgs) extends StrictLogging {
   }
 
   def download(paths: List[String]): IO[TapirFile] = {
-    val path = cliArgs.cwd.resolve(paths.toPath)
+    val path = basePath.resolve(paths.toPath)
     logger.info(s"download: $path")
     IO(Files.isDirectory(path)).flatMap {
       case true => IO.raiseError(IllegalArgumentException("directory not supported"))
