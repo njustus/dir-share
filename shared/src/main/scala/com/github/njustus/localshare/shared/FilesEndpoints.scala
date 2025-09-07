@@ -10,6 +10,8 @@ trait FilesEndpoints {
   import FilesEndpoints.*
   export FilesEndpoints.*
 
+  //TODO require password for upload -- eg generate random hash as token
+
   private val basePath = endpoint.in("api").in("files")
 
   private val filesPath = basePath

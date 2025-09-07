@@ -42,6 +42,8 @@ object DirectoryItem {
     )
   }
 
+  //TODO icons for filetypes
+  //TODO link on whole line
   private def icon(entry: FileEntry) = handleFileType(entry)(_ => MatIcon("folder_open"), _ => MatIcon("draft"))
 
   private def handleFileType(
