@@ -1,7 +1,7 @@
 package com.github.njustus.localshare.shared
 
 import io.circe.{Decoder, Encoder}
-import sttp.model.{Header, Headers, Part}
+import sttp.model.Part
 import sttp.tapir.*
 import sttp.tapir.generic.auto.*
 import sttp.tapir.json.circe.jsonBody
@@ -10,7 +10,7 @@ trait FilesEndpoints {
   import FilesEndpoints.*
   export FilesEndpoints.*
 
-  //TODO require password for upload -- eg generate random hash as token
+  // TODO require password for upload -- eg generate random hash as token
 
   private val basePath = endpoint.in("api").in("files")
 
@@ -25,7 +25,10 @@ trait FilesEndpoints {
     .in(multipartBody[MultipartUpload])
     .out(stringBody)
 
-  val downloadEndpoint = basePath.in("download").in(paths).get
+  val downloadEndpoint: Endpoint[Unit, List[String], Unit, DownloadOutput, Any] = basePath
+    .in("download")
+    .in(paths)
+    .get
     .out(header[String]("Content-Disposition"))
     .out(header[Option[String]]("Content-Type"))
     .out(fileBody)

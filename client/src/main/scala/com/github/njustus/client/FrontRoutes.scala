@@ -20,18 +20,20 @@ class FrontRoutes()(using ExecutionContext) {
   }
 //TODO restrict backend to PWD
 
-  def routes: ReactiveHtmlElement[HTMLDivElement] = {
-    div(pathPrefix("listing") {
-      firstMatch(
-        extractUnmatchedPath { paths =>
-          wireRec[ListingComponent].render(paths)
-        },
-        pathEnd {
-          wireRec[ListingComponent].render()
-        }
-      )
-    }, noneMatched {
-      navigate("/listing")
-    })
-  }
+  def routes: ReactiveHtmlElement[HTMLDivElement] =
+    div(
+      pathPrefix("listing") {
+        firstMatch(
+          extractUnmatchedPath { paths =>
+            wireRec[ListingComponent].render(paths)
+          },
+          pathEnd {
+            wireRec[ListingComponent].render()
+          }
+        )
+      },
+      noneMatched {
+        navigate("/listing")
+      }
+    )
 }

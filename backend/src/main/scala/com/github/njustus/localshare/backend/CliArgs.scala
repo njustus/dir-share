@@ -16,7 +16,7 @@ final case class CliArgs(port: Port, interface: Host, cwd: Path, secured: Boolea
       None
     } else {
       val list = Random.alphanumeric.take(50).toList
-      val pwd = Random.shuffle(list).take(8).mkString
+      val pwd  = Random.shuffle(list).take(8).mkString
       Some(pwd)
     }
 }
@@ -44,8 +44,7 @@ object CliArgs {
       .withDefault(Paths.get(System.getProperty("user.dir")))
       .map(_.toAbsolutePath)
 
-  private val securedArg: Opts[Boolean] = Opts.flag("secure", short = "s", help = "Secured by password")
-    .orTrue
+  private val securedArg: Opts[Boolean] = Opts.flag("secure", short = "s", help = "Secured by password").orTrue
 
   val cliArgs: Opts[CliArgs] =
     (portOpt, interfaceOpt, cwdArg, securedArg).mapN(CliArgs.apply)

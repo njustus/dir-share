@@ -23,7 +23,7 @@ class FilesService(cliArgs: CliArgs) extends StrictLogging {
         IO {
           val isDirectory = Files.isDirectory(path)
           FileEntry(
-            "/"+basePath.relativize(path).toString,
+            "/" + basePath.relativize(path).toString,
             path.getFileName.toString,
             if (isDirectory) FileType.Directory else FileType.File,
             Files.size(path),
@@ -39,7 +39,7 @@ class FilesService(cliArgs: CliArgs) extends StrictLogging {
     logger.info(s"Downloading: $path")
     IO(Files.isDirectory(path)).flatMap {
       case true => IO.raiseError(IllegalArgumentException("directory not supported"))
-      case _    =>
+      case _ =>
         val contentType = Option(Files.probeContentType(path))
         val disposition = s"attachment; filename=\"${path.getFileName}\""
         IO(DownloadOutput(disposition, contentType, path.toFile))

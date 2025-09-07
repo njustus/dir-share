@@ -6,8 +6,6 @@ import com.github.njustus.localshare.shared.FilesEndpoints
 import sttp.tapir.*
 import sttp.tapir.server.ServerEndpoint
 
-import java.io.File
-
 class FilesServerEndpoints(fileService: FilesService) extends FilesEndpoints with Endpoints {
 
   private val listServerEndpoint: ServerEndpoint[Any, IO] {
@@ -28,7 +26,8 @@ class FilesServerEndpoints(fileService: FilesService) extends FilesEndpoints wit
     fileService.download(paths)
   }
 
-  override val endpoints: List[ServerEndpoint[Any, IO]] = List(listServerEndpoint, uploadServerEndpoint, downloadServerEndpoint)
+  override val endpoints: List[ServerEndpoint[Any, IO]] =
+    List(listServerEndpoint, uploadServerEndpoint, downloadServerEndpoint)
 }
 
 trait Endpoints {

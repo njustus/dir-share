@@ -28,22 +28,15 @@ object DirectoryItem {
       div(
         className := "btn btn-soft btn-primary",
         handleFileType(entry)(
-          e => a(href := s"/listing${e.path}",
-            MatIcon("folder_open")
-          ),
-          e =>
-            a(
-              href   := s"/api/files/download${e.path}",
-              rel := "external",
-              MatIcon("download")
-            )
+          e => a(href := s"/listing${e.path}", MatIcon("folder_open")),
+          e => a(href := s"/api/files/download${e.path}", rel := "external", MatIcon("download"))
         )
       )
     )
   }
 
-  //TODO icons for filetypes
-  //TODO link on whole line
+  // TODO icons for filetypes
+  // TODO link on whole line
   private def icon(entry: FileEntry) = handleFileType(entry)(_ => MatIcon("folder_open"), _ => MatIcon("draft"))
 
   private def handleFileType(
