@@ -24,11 +24,11 @@ class FilesServerEndpoints(fileService: FilesService) extends FilesEndpoints wit
     fileService.upload(path, file)
   }
 
-//  downloadEndpoint.serverLogicSuccess { paths =>
-//    fileService.download(paths)
-//  }
+  private val downloadServerEndpoint = downloadEndpoint.serverLogicSuccess { paths =>
+    fileService.download(paths)
+  }
 
-  override val endpoints: List[ServerEndpoint[Any, IO]] = List(listServerEndpoint, uploadServerEndpoint)
+  override val endpoints: List[ServerEndpoint[Any, IO]] = List(listServerEndpoint, uploadServerEndpoint, downloadServerEndpoint)
 }
 
 trait Endpoints {

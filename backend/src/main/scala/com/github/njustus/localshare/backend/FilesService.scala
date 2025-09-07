@@ -2,7 +2,7 @@ package com.github.njustus.localshare.backend
 
 import cats.effect.*
 import cats.syntax.traverse.*
-import com.github.njustus.localshare.shared.FilesEndpoints.{FileEntry, FileType}
+import com.github.njustus.localshare.shared.FilesEndpoints.{DownloadOutput, FileEntry, FileType}
 import com.typesafe.scalalogging.StrictLogging
 import sttp.model.Part
 import sttp.tapir.TapirFile
@@ -34,12 +34,15 @@ class FilesService(cliArgs: CliArgs) extends StrictLogging {
     }
   }
 
-  def download(paths: List[String]): IO[TapirFile] = {
+  def download(paths: List[String]): IO[DownloadOutput] = {
     val path = basePath.resolve(paths.toPath)
-    logger.info(s"download: $path")
+    logger.info(s"Downloading: $path")
     IO(Files.isDirectory(path)).flatMap {
       case true => IO.raiseError(IllegalArgumentException("directory not supported"))
-      case _    => IO(path.toFile)
+      case _    =>
+        val contentType = Option(Files.probeContentType(path))
+        val disposition = s"attachment; filename=\"${path.getFileName}\""
+        IO(DownloadOutput(disposition, contentType, path.toFile))
     }
   }
 

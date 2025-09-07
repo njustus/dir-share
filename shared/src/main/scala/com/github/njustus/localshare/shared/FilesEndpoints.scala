@@ -1,7 +1,7 @@
 package com.github.njustus.localshare.shared
 
 import io.circe.{Decoder, Encoder}
-import sttp.model.Part
+import sttp.model.{Header, Headers, Part}
 import sttp.tapir.*
 import sttp.tapir.generic.auto.*
 import sttp.tapir.json.circe.jsonBody
@@ -23,6 +23,12 @@ trait FilesEndpoints {
     .in(multipartBody[MultipartUpload])
     .out(stringBody)
 
+  val downloadEndpoint = basePath.in("download").in(paths).get
+    .out(header[String]("Content-Disposition"))
+    .out(header[Option[String]]("Content-Type"))
+    .out(fileBody)
+    .mapOutTo[DownloadOutput]
+
   val listEndpoint: Endpoint[Unit, List[String], Unit, List[FileEntry], Any] =
     filesPath.get.out(jsonBody[List[FileEntry]])
 }
@@ -38,6 +44,8 @@ object FilesEndpoints {
     case Directory extends FileType
     case File      extends FileType
   }
+
+  case class DownloadOutput(contentDisposition: String, contentType: Option[String], content: TapirFile)
 
   given Ordering[FileType]  = Ordering.by(_.ordinal)
   given Ordering[FileEntry] = Ordering.by(entry => (entry.`type`, entry.name))
