@@ -1,7 +1,7 @@
 package com.github.njustus.client
 
 import com.github.njustus.client.components.{DirectoryItem, ListWrapper}
-import com.github.njustus.localshare.shared.FilesEndpoints.{FileEntry, MultipartUpload}
+import com.github.njustus.localshare.shared.FilesEndpoints.{FileEntry, MultipartUpload, given}
 import com.raquo.laminar.api.L.*
 import com.raquo.laminar.nodes.ReactiveHtmlElement
 import org.scalajs.dom
@@ -13,14 +13,6 @@ import scala.concurrent.ExecutionContext
 class ListingComponent(listingClient: ListEndpointsClient)(using ExecutionContext) {
 
   private def fileUploadComponent(onFileUpload: dom.File => Unit): Div = {
-//    // Event bus to handle file changes
-//    val fileEvents = new EventBus[List[dom.File]]
-//
-//    // Observer to process the file
-//    val fileObserver = fileEvents.events.map { files =>
-//      val file = files.head
-//    }
-
     def handle(files: List[dom.File]) = files.headOption.foreach(onFileUpload)
 
     div(
