@@ -22,7 +22,10 @@ object DirectoryItem {
       div(span(className := "size-10, rounded-box", iconSpan)),
       div(
         className := "list-col-grow",
-        div(entry.name),
+        handleFileType(entry)(
+          e => a(href := s"/listing${e.path}", className := "link-hover", e.name),
+          e => a(href := s"/api/files/download${e.path}", className := "link-hover", rel := "external", e.name)
+        ),
         div(className := "text-xs uppercase font-semibold opacity-60", entry.contentType.getOrElse("unknown"))
       ),
       div(
@@ -35,7 +38,6 @@ object DirectoryItem {
     )
   }
 
-  // TODO link on whole line
   private def icon(entry: FileEntry) = handleFileType(entry)(_ => MatIcon("folder_open"), e => FileIcon.fileIcon(e.name))
 
   private def handleFileType(
