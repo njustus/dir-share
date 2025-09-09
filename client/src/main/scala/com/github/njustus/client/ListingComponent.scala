@@ -43,7 +43,6 @@ class ListingComponent(listingClient: ListEndpointsClient)(using ExecutionContex
 
     div(
       className := "p-6",
-      h1(s"Contents of: $path"),
       fileUploadComponent(handle),
       ListWrapper.render(
         "Contents",
