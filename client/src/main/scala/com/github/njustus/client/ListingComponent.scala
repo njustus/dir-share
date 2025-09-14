@@ -16,19 +16,20 @@ class ListingComponent(listingClient: ListEndpointsClient)(using ExecutionContex
     def handle(files: List[dom.File]) = files.headOption.foreach(onFileUpload)
 
     div(
+      className :="flex flex-col justify-stretch gap-2",
+      p("Select a file to upload."),
       input(
-        className := "file-input file-input-primary",
+        className := "file-input file-input-primary w-full",
         `type`    := "file",
         multiple  := false,
         inContext(thisNode => onInput.mapTo(thisNode.ref.files.toList) --> handle)
-      ),
-      p("Select a file to upload.")
+      )
     )
   }
 
   def render(paths: Seq[String] = Seq()): ReactiveHtmlElement[HTMLDivElement] = {
-    val path       = paths.mkString("/")
     val contentVar = Var[List[FileEntry]](List.empty)
+    val dirPath = s"/${paths.mkString("/")}"
 
     listingClient.list(paths.toList).foreach { entries =>
       val sorted = entries.sortBy(_.`type`)
@@ -42,7 +43,8 @@ class ListingComponent(listingClient: ListEndpointsClient)(using ExecutionContex
       }
 
     div(
-      className := "p-6",
+      className := "flex flex-col gap-4",
+      h2(className:="font-semibold text-2xl", s"Current Directory: ${dirPath}"),
       fileUploadComponent(handle),
       ListWrapper.render(
         "Contents",
