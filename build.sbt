@@ -37,7 +37,6 @@ lazy val shared = crossProject(JSPlatform, JVMPlatform)
       "com.softwaremill.sttp.tapir" %%% "tapir-json-circe" % TapirVersion,
       "io.circe" %%% "circe-generic" % CirceVersion,
       "io.circe" %%% "circe-parser" % CirceVersion,
-      "io.scalaland" %%% "chimney" % "1.6.0",
       "com.softwaremill.macwire" %%% "macros" % "2.6.6",
     )
   )
@@ -59,18 +58,12 @@ lazy val client =
         "com.raquo" %%% "laminar" % "17.2.1",
         "dev.frontroute" %%% "frontroute" % "0.19.1",
         "io.github.cquiroz" %%% "scala-java-time" % "2.6.0",
-              "com.softwaremill.sttp.tapir" %%% "tapir-sttp-client4" % TapirVersion,
+        "com.softwaremill.sttp.tapir" %%% "tapir-sttp-client4" % TapirVersion,
       ),
-      // excludeDependencies ++= Seq(
-      //   "org.scala-lang.modules" %% "scala-collection-compat_sjs1",
-      // ),
       externalNpm := {
         Process("npm", baseDirectory.value).!
         baseDirectory.value
       },
-      // stIgnore ++= List(
-      //   "@tailwindcss/vite"
-      // ),
       stShortModuleNames := true,
       stEnableScalaJsDefined := Selection.All
 )
@@ -91,9 +84,6 @@ lazy val backend = (project in file("backend"))
       "org.http4s" %% "http4s-ember-client" % Http4sVersion,
       "org.http4s" %% "http4s-circe" % Http4sVersion,
       "org.http4s" %% "http4s-dsl" % Http4sVersion,
-
-      "com.github.pureconfig" %% "pureconfig-core" % "0.17.8",
-      "com.github.pureconfig" %% "pureconfig-cats-effect" % "0.17.8",
 
       "ch.qos.logback" % "logback-classic" % LogbackVersion,
       "com.typesafe.scala-logging" %% "scala-logging" % "3.9.4",
