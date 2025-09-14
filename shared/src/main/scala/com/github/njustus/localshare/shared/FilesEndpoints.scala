@@ -43,7 +43,9 @@ object FilesEndpoints {
 
   case class FileEntry(path: String, name: String, `type`: FileType, sizeInBytes: Long, contentType: Option[String])
       derives Encoder,
-        Decoder
+        Decoder {
+    lazy val isHidden = name.startsWith(".")
+  }
 
   enum FileType derives Encoder, Decoder {
     case Directory extends FileType

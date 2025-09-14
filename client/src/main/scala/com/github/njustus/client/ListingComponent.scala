@@ -28,8 +28,10 @@ class ListingComponent(listingClient: ListEndpointsClient)(using ExecutionContex
   }
 
   def render(paths: Seq[String] = Seq()): ReactiveHtmlElement[HTMLDivElement] = {
-    val contentVar = Var[List[FileEntry]](List.empty)
     val dirPath = s"/${paths.mkString("/")}"
+
+    val contentVar = Var[List[FileEntry]](List.empty)
+    val showHiddenFilesVar = Var(false)
 
     listingClient.list(paths.toList).foreach { entries =>
       val sorted = entries.sortBy(_.`type`)
@@ -42,13 +44,31 @@ class ListingComponent(listingClient: ListEndpointsClient)(using ExecutionContex
         case util.Failure(ex)    => console.error(ex)
       }
 
+    val displayedListItems = contentVar.toObservable.combineWithFn(showHiddenFilesVar) {
+      case (xs, true) => xs
+      case (xs, false) => xs.filter(entry => !entry.isHidden)
+    }
+
     div(
       className := "flex flex-col gap-4",
       h2(className:="font-semibold text-2xl", s"Current Directory: ${dirPath}"),
       fileUploadComponent(handle),
       ListWrapper.render(
-        "Contents",
-        contentVar.toObservable.map { list =>
+        div(
+        className:="flex",
+        div(className:="flex flex-1", "Contents"),
+        label(className:="label",
+          input(`type` := "checkbox",
+            className:="toggle toggle-warning",
+            controlled(
+              checked <-- showHiddenFilesVar.signal,
+              onInput.mapToChecked --> showHiddenFilesVar.writer
+            )
+          ),
+          "Show hidden files: "
+        )
+      ),
+        displayedListItems.toObservable.map { list =>
           list.map(DirectoryItem.render)
         }.changes
       )

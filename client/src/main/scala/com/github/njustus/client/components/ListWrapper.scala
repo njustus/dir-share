@@ -3,15 +3,16 @@ package com.github.njustus.client.components
 import com.github.njustus.localshare.shared.FilesEndpoints.{FileEntry, FileType}
 import com.raquo.laminar.api.L.*
 import com.raquo.laminar.nodes.ReactiveHtmlElement
-import org.scalajs.dom.HTMLLIElement
+import org.scalajs.dom.{Event, HTMLLIElement}
 
 object ListWrapper {
-  def render(title: String, listItems: EventStream[List[LI]]): HtmlElement =
-    ul(
+  def render(header: HtmlElement, listItems: EventStream[List[LI]]): HtmlElement = {
+  ul(
       className := "list bg-base-100 rounded-box shadow-md",
-      li(className := "p-4 pb-2 text-xs opacity-60 tracking-wide", title),
+      li(className := "p-4 pb-2 text-xs opacity-60 tracking-wide", header),
       children <-- listItems
     )
+    }
 }
 
 object DirectoryItem {
