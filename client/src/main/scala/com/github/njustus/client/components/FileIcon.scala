@@ -24,24 +24,24 @@ object FileIcon {
     "csv"  -> FileIcon("table", "text-green-600"),
 
     // Code & Text Icons
-    "txt"  -> FileIcon("code", "text-gray-500"),
-    "log"  -> FileIcon("code", "text-gray-500"),
-    "sh"  -> FileIcon("code", "text-gray-500"),
-    "md"  -> FileIcon("markdown", "text-gray-500"),
+    "txt"   -> FileIcon("code", "text-gray-500"),
+    "log"   -> FileIcon("code", "text-gray-500"),
+    "sh"    -> FileIcon("code", "text-gray-500"),
+    "md"    -> FileIcon("markdown", "text-gray-500"),
     "conf"  -> FileIcon("settings", "text-gray-500"),
-    "json" -> FileIcon("file_json", "text-purple-600"),
-    "xml"  -> FileIcon("code", "text-yellow-600"),
-    "html" -> FileIcon("html", "text-orange-600"),
-    "htm"  -> FileIcon("html", "text-orange-600"),
-    "css"  -> FileIcon("code", "text-blue-600"),
-    "js"   -> FileIcon("javascript", "text-yellow-500"),
-    "ts"   -> FileIcon("code", "text-blue-700"),
-    "java" -> FileIcon("code", "text-red-600"),
-    "scala"-> FileIcon("code", "text-orange-600"),
-    "py"   -> FileIcon("code", "text-blue-600"),
-    "cs"   -> FileIcon("code", "text-purple-600"),
-    "c"    -> FileIcon("code", "text-blue-500"),
-    "cpp"  -> FileIcon("code", "text-blue-500"),
+    "json"  -> FileIcon("file_json", "text-purple-600"),
+    "xml"   -> FileIcon("code", "text-yellow-600"),
+    "html"  -> FileIcon("html", "text-orange-600"),
+    "htm"   -> FileIcon("html", "text-orange-600"),
+    "css"   -> FileIcon("code", "text-blue-600"),
+    "js"    -> FileIcon("javascript", "text-yellow-500"),
+    "ts"    -> FileIcon("code", "text-blue-700"),
+    "java"  -> FileIcon("code", "text-red-600"),
+    "scala" -> FileIcon("code", "text-orange-600"),
+    "py"    -> FileIcon("code", "text-blue-600"),
+    "cs"    -> FileIcon("code", "text-purple-600"),
+    "c"     -> FileIcon("code", "text-blue-500"),
+    "cpp"   -> FileIcon("code", "text-blue-500"),
 
     // Media Icons
     "jpg"  -> FileIcon("image", "text-pink-500"),
@@ -60,22 +60,19 @@ object FileIcon {
     "webm" -> FileIcon("video_file", "text-red-500"),
 
     // Archive Icons
-    "zip"  -> FileIcon("folder_zip", "text-yellow-500"),
-    "rar"  -> FileIcon("folder_zip", "text-yellow-500"),
-    "7z"   -> FileIcon("folder_zip", "text-yellow-500"),
-    "tar"  -> FileIcon("folder_zip", "text-yellow-500"),
+    "zip" -> FileIcon("folder_zip", "text-yellow-500"),
+    "rar" -> FileIcon("folder_zip", "text-yellow-500"),
+    "7z"  -> FileIcon("folder_zip", "text-yellow-500"),
+    "tar" -> FileIcon("folder_zip", "text-yellow-500")
   )
 
   private def getFileIcon(extension: String): FileIcon =
     fileIcons.getOrElse(extension.toLowerCase, FileIcon("draft", "text-gray-400"))
 
-  def fileIcon(fileName: String) = {
+  def fileIcon(fileName: String): ReactiveHtmlElement[HTMLSpanElement] = {
     val suffix = fileName.split('.').last
-    val icon = getFileIcon(suffix)
+    val icon   = getFileIcon(suffix)
 
-    span(
-      className := icon.colorClass,
-      MatIcon(icon.name)
-    )
+    span(className := icon.colorClass, MatIcon(icon.name))
   }
 }

@@ -3,16 +3,15 @@ package com.github.njustus.client.components
 import com.github.njustus.localshare.shared.FilesEndpoints.{FileEntry, FileType}
 import com.raquo.laminar.api.L.*
 import com.raquo.laminar.nodes.ReactiveHtmlElement
-import org.scalajs.dom.{Event, HTMLLIElement}
+import org.scalajs.dom.HTMLLIElement
 
 object ListWrapper {
-  def render(header: HtmlElement, listItems: EventStream[List[LI]]): HtmlElement = {
-  ul(
+  def render(header: HtmlElement, listItems: EventStream[List[LI]]): HtmlElement =
+    ul(
       className := "list bg-base-100 rounded-box shadow-md",
       li(className := "p-4 pb-2 text-xs opacity-60 tracking-wide", header),
       children <-- listItems
     )
-    }
 }
 
 object DirectoryItem {
@@ -39,7 +38,8 @@ object DirectoryItem {
     )
   }
 
-  private def icon(entry: FileEntry) = handleFileType(entry)(_ => MatIcon("folder_open"), e => FileIcon.fileIcon(e.name))
+  private def icon(entry: FileEntry) =
+    handleFileType(entry)(_ => MatIcon("folder_open"), e => FileIcon.fileIcon(e.name))
 
   private def handleFileType(
     entry: FileEntry
