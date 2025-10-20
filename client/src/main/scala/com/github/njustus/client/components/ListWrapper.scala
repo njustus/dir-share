@@ -29,7 +29,7 @@ object DirectoryItem {
         div(className := "text-xs uppercase font-semibold opacity-60", entry.contentType.getOrElse("unknown"))
       ),
       div(
-        className := "btn btn-soft btn-primary",
+        className := "btn btn-link",
         handleFileType(entry)(
           e => a(href := s"/listing${e.path}", MatIcon("folder_open")),
           e => a(href := s"/api/files/download${e.path}", rel := "external", MatIcon("download"))
