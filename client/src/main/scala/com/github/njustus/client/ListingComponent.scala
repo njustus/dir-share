@@ -1,6 +1,6 @@
 package com.github.njustus.client
 
-import com.github.njustus.client.components.{DirectoryItem, ListWrapper}
+import com.github.njustus.client.components.{BreadcrumbList, DirectoryItem, ListWrapper}
 import com.github.njustus.localshare.shared.FilesEndpoints.{FileEntry, MultipartUpload, given}
 import com.raquo.laminar.api.L.*
 import com.raquo.laminar.nodes.ReactiveHtmlElement
@@ -52,6 +52,7 @@ class ListingComponent(listingClient: ListEndpointsClient)(using ExecutionContex
     div(
       className := "flex flex-col gap-4",
       h2(className := "font-semibold text-2xl", s"Current Directory: ${dirPath}"),
+      BreadcrumbList.render(paths),
       fileUploadComponent(handle),
       ListWrapper.render(
         div(

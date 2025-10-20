@@ -18,7 +18,6 @@ class FrontRoutes()(using ExecutionContext) {
     val backend: WebSocketBackend[Future] = FetchBackend()
     new SttpClientAdapter(inter, backend)
   }
-//TODO restrict backend to PWD
 
   def routes: ReactiveHtmlElement[HTMLDivElement] =
     div(
