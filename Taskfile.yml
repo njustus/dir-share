@@ -15,10 +15,15 @@ tasks:
   build-backend:
     aliases: [build]
     deps:
+      - task: setup-client
       - task: build-client
     cmds:
       - sbt ";backend/clean;backend/Universal/packageBin"
 
+  setup-client:
+    dir: ./client
+    cmds:
+      - npm ci
   build-client:
     cmds:
       - sbt ";clean;client/fastLinkJS"
