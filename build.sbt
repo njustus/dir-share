@@ -47,7 +47,7 @@ lazy val client =
     .dependsOn(shared.js)
     .enablePlugins(ScalaJSPlugin)
     .settings(
-      name := "locale-share-client",
+      name := "dir-share-client",
       // This is an application with a main method
       scalaJSUseMainModuleInitializer := true,
       scalaJSLinkerConfig ~= {
@@ -75,7 +75,7 @@ lazy val backend = (project in file("backend"))
   .settings(
     fork := true,
     connectInput := true,
-    name := "locale-share-backend",
+    name := "dir-share-backend",
     (Compile/unmanagedResourceDirectories) += (client.base.getAbsoluteFile / "dist"),
     libraryDependencies ++= Seq(
       "com.softwaremill.sttp.tapir" %% "tapir-http4s-server" % TapirVersion,

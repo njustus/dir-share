@@ -3,6 +3,8 @@ version: '3'
 #dotenv: [ '.env' ]
 
 tasks:
+  default:
+    cmd: task -a
   clean:
     cmds:
       - rm -r backend/target
