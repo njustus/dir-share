@@ -12,20 +12,17 @@ import scala.concurrent.ExecutionContext
 
 class ListingComponent(listingClient: ListEndpointsClient)(using ExecutionContext) {
 
-  private def fileUploadComponent(onFileUpload: dom.File => Unit): Div = {
-    def handle(files: List[dom.File]) = files.headOption.foreach(onFileUpload)
-
+  private def fileUploadComponent(onFilesUpload: List[dom.File] => Unit): Div =
     div(
       className := "flex flex-col justify-stretch gap-2",
-      p("Select a file to upload."),
+      p("Select files to upload."),
       input(
         className := "file-input file-input-primary w-full",
         `type`    := "file",
-        multiple  := false,
-        inContext(thisNode => onInput.mapTo(thisNode.ref.files.toList) --> handle)
+        multiple  := true,
+        inContext(thisNode => onInput.mapTo(thisNode.ref.files.toList) --> onFilesUpload)
       )
     )
-  }
 
   def render(paths: Seq[String] = Seq()): ReactiveHtmlElement[HTMLDivElement] = {
     val dirPath = s"/${paths.mkString("/")}"
@@ -38,11 +35,12 @@ class ListingComponent(listingClient: ListEndpointsClient)(using ExecutionContex
       contentVar.set(sorted)
     }
 
-    def handle(file: dom.File) =
-      listingClient.upload(paths.toList, MultipartUpload(Part(file.name, file))).onComplete {
-        case util.Success(value) => window.location.reload()
-        case util.Failure(ex)    => console.error(ex)
+    def handle(files: List[dom.File]) = {
+      listingClient.upload(paths.toList, MultipartUpload(files.map(f => Part(f.name, f)))).onComplete {
+        case util.Success(_) => window.location.reload()
+        case util.Failure(ex) => console.error(ex)
       }
+    }
 
     val displayedListItems = contentVar.toObservable.combineWithFn(showHiddenFilesVar) {
       case (xs, true)  => xs

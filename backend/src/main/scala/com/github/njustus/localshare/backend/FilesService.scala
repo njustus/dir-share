@@ -46,12 +46,15 @@ class FilesService(cliArgs: CliArgs) extends StrictLogging {
     }
   }
 
-  def upload(paths: List[String], tapirFile: Part[TapirFile]): IO[String] = IO {
-    val path   = cliArgs.cwd.resolve(paths.toPath.resolve(tapirFile.fileName.get)) // TODO handle none
-    val target = Files.copy(tapirFile.body.toPath, path)
-    logger.info(s"Uploaded ${tapirFile.name} into $target")
-    s"Uploaded into $target"
-  }
+  def upload(paths: List[String], files: List[Part[TapirFile]]): IO[String] =
+    files.traverse { tapirFile =>
+      IO {
+        val path   = cliArgs.cwd.resolve(paths.toPath.resolve(tapirFile.fileName.get))
+        val target = Files.copy(tapirFile.body.toPath, path)
+        logger.info(s"Uploaded ${tapirFile.name} into $target")
+        target.toString
+      }
+    }.map(targets => s"Uploaded into ${targets.mkString(", ")}")
 
   private def contentPaths(path: Path) =
     for {
