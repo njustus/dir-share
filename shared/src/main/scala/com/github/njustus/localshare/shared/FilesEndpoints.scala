@@ -41,9 +41,15 @@ trait FilesEndpoints {
 object FilesEndpoints {
   case class MultipartUpload(files: List[Part[TapirFile]])
 
-  case class FileEntry(path: String, name: String, `type`: FileType, sizeInBytes: Long, contentType: Option[String])
-      derives Encoder,
-        Decoder {
+  case class FileEntry(
+    path: String,
+    name: String,
+    `type`: FileType,
+    sizeInBytes: Long,
+    contentType: Option[String],
+    lastModifiedAt: Long
+  ) derives Encoder,
+      Decoder {
     lazy val isHidden: Boolean = name.startsWith(".")
   }
 

@@ -27,7 +27,8 @@ class FilesService(cliArgs: CliArgs) extends StrictLogging {
             path.getFileName.toString,
             if (isDirectory) FileType.Directory else FileType.File,
             Files.size(path),
-            Option(Files.probeContentType(path))
+            Option(Files.probeContentType(path)),
+            Files.getLastModifiedTime(path).toInstant.toEpochMilli
           )
         }
       }

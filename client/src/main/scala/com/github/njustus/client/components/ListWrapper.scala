@@ -5,6 +5,8 @@ import com.raquo.laminar.api.L.*
 import com.raquo.laminar.nodes.ReactiveHtmlElement
 import org.scalajs.dom.HTMLLIElement
 
+import scala.scalajs.js
+
 object ListWrapper {
   def render(header: HtmlElement, listItems: EventStream[List[LI]]): HtmlElement =
     ul(
@@ -26,7 +28,12 @@ object DirectoryItem {
           e => a(href := s"/listing${e.path}", className := "link-hover", e.name),
           e => a(href := s"/api/files/download${e.path}", className := "link-hover", rel := "external", e.name)
         ),
-        div(className := "text-xs uppercase font-semibold opacity-60", entry.contentType.getOrElse("unknown"))
+        div(
+          className := "text-xs opacity-60",
+          entry.contentType.getOrElse("unknown"),
+          " · ",
+          new js.Date(entry.lastModifiedAt.toDouble).toLocaleString()
+        )
       ),
       div(
         className := "btn btn-link",
